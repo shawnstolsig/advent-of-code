@@ -7,8 +7,8 @@ const getInputData = (filename) => {
 const main = async () => {
 
     // get input data string
-    let filename = 'test.txt';
-    // let filename = 'input.txt';
+    // let filename = 'test.txt';
+    let filename = 'input.txt';
     let data = await getInputData(filename);
 
     // trim whitespace and convert to array
@@ -62,8 +62,13 @@ const checkPassport = (passport) => {
 }
 
 const checkPassportPart2 = (passport) => {
-    let {byr, iyr, eyr, hgt, hcl, ecl, pid, cid} = passport
+
+    // check to make sure all required fields exist, return false if they don't
+    if (!checkPassport(passport)) return false;
+
+
     /*
+    RULES:
     byr (Birth Year) - four digits; at least 1920 and at most 2002.
     iyr (Issue Year) - four digits; at least 2010 and at most 2020.
     eyr (Expiration Year) - four digits; at least 2020 and at most 2030.
@@ -75,12 +80,56 @@ const checkPassportPart2 = (passport) => {
     pid (Passport ID) - a nine-digit number, including leading zeroes.
     cid (Country ID) - ignored, missing or not.
      */
-    byr = 1920 <= parseInt(byr) && parseInt(byr) <= 2002;
-    iyr = 2010 <= parseInt(iyr) && parseInt(iyr) <= 2020;
-    eyr = 2020 <= parseInt(eyr) && parseInt(eyr) <= 2030;
 
-    // return !!byr && !!iyr && !!eyr && !!hgt && !!hcl && !!ecl && !!pid
-    return byr && iyr && eyr
+    // years
+    let byr = parseInt(passport.byr);
+    let iyr = parseInt(passport.iyr);
+    let eyr = parseInt(passport.eyr);
+    byr >= 1920 && byr <= 2002 ? byr = true : byr = false;
+    iyr >= 2010 && iyr <= 2020 ? iyr = true : iyr = false;
+    eyr >= 2020 && eyr <= 2030 ? eyr = true : eyr = false;
+
+    // height
+    let hgt = false;
+    let re = /\d+/g;
+    let matches = passport.hgt.match(re)
+    if(!matches) {
+        return false;
+    }
+    let heightAmount = parseInt(matches[0]);
+
+    re = /[a-z]+/g;
+    matches = passport.hgt.match(re)
+    if(!matches) {
+        return false;
+    }
+    let heightUnit = matches[0]
+
+    if(heightUnit === 'cm'){
+        if(heightAmount >= 150 && heightAmount <= 193) hgt = true;
+    } else if (heightUnit === 'in'){
+        if(heightAmount >= 59 && heightAmount <= 76) hgt = true;
+    }
+
+    // hair color
+    let hcl = false;
+    re = /#[0-9a-f]{6}/g;
+    matches = passport.hcl.match(re)
+    if(matches && matches.length === 1) hcl = true;
+
+    // eye color
+    let ecl = false
+    let allowed = ['amb','blu','brn','gry','grn','hzl','oth'];
+    let filterResults = allowed.filter((el) => passport.ecl === el)
+    if(filterResults.length === 1) ecl = true;
+
+    // passport id
+    let pid = false;
+    re = /^[0-9]{9}$/g;
+    matches = passport.pid.match(re)
+    if(matches && matches.length === 1) pid = true;
+
+    return byr && iyr && eyr && hgt && hcl && ecl && pid
 }
 
 
