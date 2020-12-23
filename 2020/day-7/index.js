@@ -14,6 +14,38 @@ const findOuterBag = (inverseRules, possibleOuterBags, innerBag) => {
     return possibleOuterBags
 }
 
+const countInnerBags = (rules, bag) => {
+    // lookup rules for bag
+    let thisBagRules = rules[bag]
+
+    // check to see if bag is dead end
+    if(Object.keys(thisBagRules).length === 0){
+        return 0
+    }
+
+    let loopArr = []
+
+    // iterate through rules for bag
+    for(let innerBag in thisBagRules){
+
+        // figure out how many times to call function
+        let loopCount = parseInt(thisBagRules[innerBag])
+
+        for(let i = 0; i < loopCount; i++){
+            loopArr.push(innerBag)
+        }
+    }
+
+    // call function the specified number of
+    let thisLevelBagCount = loopArr.length
+    for(let b of loopArr){
+        thisLevelBagCount +=  countInnerBags(rules, b)
+    }
+
+    return thisLevelBagCount
+}
+
+
 const main = async () => {
 
     // let input = fs.readFileSync('test.txt', 'utf-8');
@@ -65,6 +97,7 @@ const main = async () => {
     // PART 2
     console.log(`Part 2:`)
 
+    console.log('Answer is ', countInnerBags(rules, bagToCheck))
 
 };
 
