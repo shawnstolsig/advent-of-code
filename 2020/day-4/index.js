@@ -7,7 +7,7 @@ const getInputData = (filename) => {
 const main = async () => {
 
     // get input data string
-    // let filename = 'test.txt';
+    // let filename = 'test2.txt';
     let filename = 'input.txt';
     let data = await getInputData(filename);
 

@@ -20,7 +20,7 @@ const findWeakness = (arr) => {
 
 const main = async () => {
 
-    // let data = fs.readFileSync('test.txt', 'utf-8');
+    // let data = fs.readFileSync('test2.txt', 'utf-8');
     let data = fs.readFileSync('input.txt', 'utf-8');
     let input = data.trim().split('\n');
     input = input.map((el) => parseInt(el))

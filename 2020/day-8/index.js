@@ -49,7 +49,7 @@ const parseRow = (row) => {
 
 const main = async () => {
 
-    // let input = fs.readFileSync('test.txt', 'utf-8');
+    // let input = fs.readFileSync('test2.txt', 'utf-8');
     let input = fs.readFileSync('input.txt', 'utf-8');
     let code = input.trim().split('\n');
 
